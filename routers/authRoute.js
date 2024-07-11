@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const UserDB = require("../model/UserDB.js");
 
-const saltCount = 10;
+const saltCount = 8; //For faster Hashing use rounds=8 : ~40 hashes/sec. reference :- https://www.npmjs.com/package/bcrypt
 
 router.post("/signup", async (req, res) => {
     try {
