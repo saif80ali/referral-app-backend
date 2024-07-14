@@ -5,17 +5,20 @@ const userSchema = new Schema({
     name: {
         type: String,
         required: true,
+        minLength: 3,
         maxLength: 50,
     },
     email: {
         type: String,
         required: true,
-        maxLength: 50,
+        maxLength: 256,
         unique: true,
     },
     password: {
         type: String,
         required: true,
+        minLength: 8,
+        maxLength: 150,
     },
     isVerified: {
         type: Boolean,
@@ -31,5 +34,5 @@ const userSchema = new Schema({
     }
 }, { collection: 'user' })
 
-UserDB = mongoose.model("user", userSchema)
+const UserDB = mongoose.model("user", userSchema)
 module.exports = UserDB;
