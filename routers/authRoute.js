@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const Validations = require("../validators/userValidation.js");
@@ -34,9 +35,8 @@ router.post(
         };
         let newUser = new UserDB(newUserInfo);
         await newUser.save();
-        savedUser = newUser.toObject(); // Convert Mongoose document to plain JavaScript object
-        delete savedUser.password; // Remove 'password' field from the object
-        res.status(200).send({ status: "Success", user: savedUser });
+        const userToken = generateToken({_id: newUser._id});
+        res.status(200).send({ status: "Success", message: "Sign up successful", userToken });
       }
     } catch (e) {
       console.error(e);
@@ -66,7 +66,8 @@ router.post(
       } else {
         let match = await bcrypt.compare(req.body.password, user.password);
         if (match) {
-          res.status(200).send({ status: "Success", message: "Login success" });
+          const userToken = generateToken(user._id);
+          res.status(200).send({ status: "Success", message: "Login success", userToken });
         } else {
           res.status(200).send({
             status: "Failure",
@@ -85,5 +86,27 @@ router.post(
     }
   }
 );
+
+// Scope to make is async
+const generateToken = (data) => {
+  if(data) {
+    const key = process.env.SECRET_KEY;
+    const token = jwt.sign({ data: data }, key);
+    return token;
+  } else {
+    throw "Data is Empty";
+  }
+}
+
+const decodeToken = (token) => {
+  // verify a token symmetric - synchronous
+  const key = process.env.SECRET_KEY;
+  try {
+    const decoded = jwt.verify(token, key);
+    console.log(decoded);
+  } catch(err) {
+    console.error("Something went wrong")
+  }
+}
 
 module.exports = router;
