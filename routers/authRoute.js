@@ -98,15 +98,4 @@ const generateToken = (data) => {
   }
 }
 
-const decodeToken = (token) => {
-  // verify a token symmetric - synchronous
-  const key = process.env.SECRET_KEY;
-  try {
-    const decoded = jwt.verify(token, key);
-    console.log(decoded);
-  } catch(err) {
-    console.error("Something went wrong")
-  }
-}
-
 module.exports = router;

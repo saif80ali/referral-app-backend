@@ -10,6 +10,10 @@ const userCompanyDetails = new Schema({
         type: String,
         required: true,
     },
+    city: {
+        type: String,
+        required: true,
+    },
     startDate: {
         type: Date,
         required: true,
@@ -25,7 +29,7 @@ const userCompanyDetails = new Schema({
         type: Date,
         default: Date.now,
     }
-}, { userCompanyDetails: 'user' })
+}, { collection: 'userCompanyDetails' })
 
-const UserCompanyDetailsDB = mongoose.model("user", userCompanyDetails);
+const UserCompanyDetailsDB = mongoose.model("userCompanyDetails", userCompanyDetails);
 module.exports = UserCompanyDetailsDB;
