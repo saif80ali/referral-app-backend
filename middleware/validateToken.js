@@ -13,7 +13,7 @@ function validateToken(req, res, next) {
         res.status(401).send({message: "Unauthorized access"});
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(401).send({message: "Unauthorized access"});
   }
 }
