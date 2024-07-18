@@ -1,10 +1,19 @@
 const mongoose = require("mongoose");
 const {Schema} = mongoose;
 
-const userCompanyDetails = new Schema({
+const userDetails = new Schema({
     userID: {
         type: Schema.Types.ObjectId,
         required: true,
+        unique: true,
+    },
+    profilePicture: {
+        type: Buffer,
+        contentType: String
+    },
+    resume: {
+        type: Buffer,
+        contentType: String
     },
     organizationName: {
         type: String,
@@ -29,7 +38,7 @@ const userCompanyDetails = new Schema({
         type: Date,
         default: Date.now,
     }
-}, { collection: 'userCompanyDetails' })
+}, { collection: 'userDetails' })
 
-const UserCompanyDetailsDB = mongoose.model("userCompanyDetails", userCompanyDetails);
-module.exports = UserCompanyDetailsDB;
+const userDetailsDB = mongoose.model("userDetails", userDetails);
+module.exports = userDetailsDB;
