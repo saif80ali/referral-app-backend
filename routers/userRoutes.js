@@ -1,6 +1,7 @@
 const express = require("express");
 const userRouter = express.Router();
 const validateToken = require("../middleware/validateToken.js");
+const upload = require("../helper/fileUpload.js");
 
 const UserDetailsDB = require("../model/user_information/userDetailsDB.js");
 
@@ -13,7 +14,7 @@ userRouter.get("/get-details", validateToken, async (req, res) => {
     }
 })
 
-userRouter.post("/set-details", validateToken, async (req, res) => {
+userRouter.post("/set-details", validateToken, upload.single('resume'), async (req, res) => {
     try {
         if (req.userid == req.body.userID) {
             data = await UserDetailsDB.findOne({"userID": req.userid});
@@ -25,7 +26,7 @@ userRouter.post("/set-details", validateToken, async (req, res) => {
                     organizationName: req.body.organizationName,
                     city: req.body.city,
                     startDate: req.body.startDate,
-                    currentlyWorking: req.body.currentlyWorking,
+                    resumeName: req.file.filename
                 };
                 details = new UserDetailsDB(userDetails);
                 await details.save();
@@ -35,6 +36,20 @@ userRouter.post("/set-details", validateToken, async (req, res) => {
             res.status(401).send({message: "Invalid user ID"});
         }
         
+    } catch (e) {
+        console.error(e)
+        res.status(400).send({status:"Failure", message:"Something went wrong"});
+    }
+})
+
+
+//Rote to test file upload
+userRouter.post("/upload", validateToken, upload.single('uploaded_file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).send({ status: "Failure", message: "No file uploaded" });
+        }
+        res.status(200).send({ fileName: req.file.filename, body:req.body });
     } catch (e) {
         console.error(e)
         res.status(400).send({status:"Failure", message:"Something went wrong"});

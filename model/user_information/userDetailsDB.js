@@ -11,29 +11,19 @@ const userDetails = new Schema({
         type: Buffer,
         contentType: String
     },
-    resume: {
-        type: Buffer,
-        contentType: String
+    resumeName: {
+        type: String,
     },
     organizationName: {
         type: String,
-        required: true,
     },
     city: {
         type: String,
-        required: true,
     },
     startDate: {
         type: Date,
-        required: true,
     },
-    endDate: {
-        type: Date,
-    },
-    currentlyWorking: {
-        type: Boolean,
-        default: false,
-    },
+
     formUpdateDate: {
         type: Date,
         default: Date.now,
